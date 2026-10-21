@@ -133,11 +133,11 @@ function syncColors(){
   var c=state.colors;
   $('#cBg').value=c.bg; $('#cInk').value=c.ink; $('#cRoute').value=c.route; $('#cStartFlag').value=c.startFlag||c.route; $('#cStageLegend').value=c.stageLegend||c.ink;
   $('#cProfile').value=c.profile||c.ink; $('#cHighlight').value=c.highlight||c.ink;
-  $('#cStatValue').value=c.statValue||c.ink; $('#cStatLabel').value=c.statLabel||mixHex(c.bg,c.ink,0.68); $('#cDate').value=c.date||mixHex(c.bg,c.ink,0.68); $('#cSubtitle').value=c.subtitle||mixHex(c.bg,c.ink,0.68);
+  $('#cStatValue').value=c.statValue||c.ink; $('#cStatLabel').value=c.statLabel||mixHex(c.bg,c.ink,0.68); $('#cStatsBg').value=c.statsBg||mixHex(c.bg,c.ink,0.08); $('#cDate').value=c.date||mixHex(c.bg,c.ink,0.68); $('#cSubtitle').value=c.subtitle||mixHex(c.bg,c.ink,0.68);
   Array.prototype.forEach.call($('#presets').children,function(b){
     var p=allPresets()[+b.dataset.i];
-    var expected={bg:p.bg,ink:p.ink,route:p.route,startFlag:p.startFlag||p.route,stageLegend:p.stageLegend||p.ink,profile:p.profile||p.ink,highlight:p.highlight||p.ink,statValue:p.statValue||p.ink,statLabel:p.statLabel||mixHex(p.bg,p.ink,0.68),date:p.date||mixHex(p.bg,p.ink,0.68),subtitle:p.subtitle||mixHex(p.bg,p.ink,0.68)};
-    var on=['bg','ink','route','startFlag','stageLegend','profile','highlight','statValue','statLabel','date','subtitle'].every(function(k){return (expected[k]||'').toLowerCase()===(c[k]||'').toLowerCase();});
+    var expected={bg:p.bg,ink:p.ink,route:p.route,startFlag:p.startFlag||p.route,stageLegend:p.stageLegend||p.ink,profile:p.profile||p.ink,highlight:p.highlight||p.ink,statValue:p.statValue||p.ink,statLabel:p.statLabel||mixHex(p.bg,p.ink,0.68),statsBg:p.statsBg||mixHex(p.bg,p.ink,0.08),date:p.date||mixHex(p.bg,p.ink,0.68),subtitle:p.subtitle||mixHex(p.bg,p.ink,0.68)};
+    var on=['bg','ink','route','startFlag','stageLegend','profile','highlight','statValue','statLabel','statsBg','date','subtitle'].every(function(k){return (expected[k]||'').toLowerCase()===(c[k]||'').toLowerCase();});
     b.setAttribute('aria-pressed',on?'true':'false');
   });
   var hint='';
@@ -157,12 +157,12 @@ $('#presets').addEventListener('click',function(e){
   var p=allPresets()[+b.dataset.i];
   applyPreset(p);presetMessage('Einstellungen „'+p.name+'“ wurden angewendet.');
 });
-[['#cBg','bg'],['#cInk','ink'],['#cRoute','route'],['#cStartFlag','startFlag'],['#cStageLegend','stageLegend'],['#cProfile','profile'],['#cHighlight','highlight'],['#cStatValue','statValue'],['#cStatLabel','statLabel'],['#cDate','date'],['#cSubtitle','subtitle']].forEach(function(pair){
+[['#cBg','bg'],['#cInk','ink'],['#cRoute','route'],['#cStartFlag','startFlag'],['#cStageLegend','stageLegend'],['#cProfile','profile'],['#cHighlight','highlight'],['#cStatValue','statValue'],['#cStatLabel','statLabel'],['#cStatsBg','statsBg'],['#cDate','date'],['#cSubtitle','subtitle']].forEach(function(pair){
   $(pair[0]).addEventListener('input',function(e){
     state.colors[pair[1]]=e.target.value; syncColors(); render();
   });
 });
-var presetColorKeys=['bg','ink','route','startFlag','stageLegend','profile','highlight','statValue','statLabel','date','subtitle'];
+var presetColorKeys=['bg','ink','route','startFlag','stageLegend','profile','highlight','statValue','statLabel','statsBg','date','subtitle'];
 var presetStatKeys=['distance','ascent','max','min','elapsed','moving'];
 var vacationStatKeys=['tours','ascent','days','longest','highest','average','elapsed','moving'];
 var presetSettingKeys=['fmt','customWidth','customHeight','printBleedMm','safe','showStageFlags','stageLegendPosition','stageLegendFontSize','stageLegendBackground','stageLegendOpacity','activityLogo','showEle','showStats','stats','statsFontSize','plates','profilePlate','plateOpacity','labelGap','labelMode','hlFontSize','titleFontSize','subtitleFontSize','metaFontSize','showTitle','showSubtitle','showRegion','showDate','vacTextSize','vacLabelSize','vacValueSize','vacationStats','vacationStatOrder'];
@@ -182,8 +182,8 @@ function currentPresetSettings(){
 function applyPreset(p){
   var s=p.settings||{};
   presetSettingKeys.forEach(function(k){if(s[k]!==undefined){state[k]=s[k];}});
-  var presetColors=p.colors||{bg:p.bg,ink:p.ink,route:p.route,startFlag:p.route,stageLegend:p.ink,profile:p.profile||p.ink,highlight:p.highlight||p.ink,statValue:p.statValue||p.ink,statLabel:p.statLabel||mixHex(p.bg,p.ink,0.68),date:p.date||mixHex(p.bg,p.ink,0.68),subtitle:p.subtitle||mixHex(p.bg,p.ink,0.68)};
-  state.colors={};presetColorKeys.forEach(function(k){state.colors[k]=presetColors[k]|| (k==='startFlag'?presetColors.route:k==='stageLegend'?presetColors.ink:undefined);});
+  var presetColors=p.colors||{bg:p.bg,ink:p.ink,route:p.route,startFlag:p.route,stageLegend:p.ink,profile:p.profile||p.ink,highlight:p.highlight||p.ink,statValue:p.statValue||p.ink,statLabel:p.statLabel||mixHex(p.bg,p.ink,0.68),statsBg:mixHex(p.bg,p.ink,0.08),date:p.date||mixHex(p.bg,p.ink,0.68),subtitle:p.subtitle||mixHex(p.bg,p.ink,0.68)};
+  state.colors={};presetColorKeys.forEach(function(k){state.colors[k]=presetColors[k]|| (k==='startFlag'?presetColors.route:k==='stageLegend'?presetColors.ink:k==='statsBg'?mixHex(presetColors.bg||p.bg,presetColors.ink||p.ink,0.08):undefined);});
   if(s.stats){state.stats={};presetStatKeys.forEach(function(k){state.stats[k]=!!s.stats[k];});}
   if(s.vacationStats){state.vacationStats={};vacationStatKeys.forEach(function(k){state.vacationStats[k]=!!s.vacationStats[k];});}
   if(s.vacationStatOrder){state.vacationStatOrder=s.vacationStatOrder.slice();}
@@ -194,7 +194,7 @@ function applyPreset(p){
   ['safe','showStageFlags','stageLegendBackground','showEle','showStats','plates','profilePlate','showTitle','showSubtitle','showRegion','showDate'].forEach(function(k){state[k]=!!state[k];});
   if(['none','top','bottom','left','right'].indexOf(state.stageLegendPosition)<0){state.stageLegendPosition='none';}
   if(['none','hike','run','bike','kayak','sup','swim'].indexOf(state.activityLogo)<0){state.activityLogo='none';}
-  if(['c100','c150','c200','story','feed','sq','custom'].indexOf(state.fmt)<0){state.fmt='c150';}
+  if(['c100','c150','c200','a4p','a4l','a3p','a3l','story','feed','sq','custom'].indexOf(state.fmt)<0){state.fmt='c150';}
   if(['route','profile'].indexOf(state.labelMode)<0){state.labelMode='profile';}
   $('#customWidth').value=state.customWidth;$('#customHeight').value=state.customHeight;$('#printBleed').value=state.printBleedMm;
   $('#optSafe').checked=state.safe;$('#optEle').checked=state.showEle;$('#optStats').checked=state.showStats;$('#optPlates').checked=state.plates;$('#profilePlate').checked=state.profilePlate;
@@ -236,13 +236,14 @@ $('#presetFile').addEventListener('change',function(e){
         var value=data.colors[k];
         if(k==='startFlag'&&value===undefined){value=data.colors.route;}
         if(k==='stageLegend'&&value===undefined){value=data.colors.ink;}
+        if(k==='statsBg'&&value===undefined){value=mixHex(data.colors.bg,data.colors.ink,0.08);}
         if(typeof value!=='string'||!/^#[0-9a-f]{6}$/i.test(value)){throw new Error('Die Farbe „'+k+'“ fehlt oder ist ungültig.');}
         colors[k]=value.toLowerCase();
       });
       var preset={name:name,colors:colors,settings:data.settings||{}};
       if(data.settings){
         var s=data.settings;
-        if(s.fmt!==undefined&&['c100','c150','c200','story','feed','sq','custom'].indexOf(s.fmt)<0){throw new Error('Das Ausgabeformat in der Datei ist ungültig.');}
+        if(s.fmt!==undefined&&['c100','c150','c200','a4p','a4l','a3p','a3l','story','feed','sq','custom'].indexOf(s.fmt)<0){throw new Error('Das Ausgabeformat in der Datei ist ungültig.');}
         ['safe','showStageFlags','stageLegendBackground','showEle','showStats','plates','profilePlate','showTitle','showSubtitle','showRegion','showDate'].forEach(function(k){if(s[k]!==undefined&&typeof s[k]!=='boolean'){throw new Error('Die Option „'+k+'“ in der Datei ist ungültig.');}});
         if(s.stageLegendPosition!==undefined&&['none','top','bottom','left','right'].indexOf(s.stageLegendPosition)<0){throw new Error('Die Position der Etappenlegende ist ungültig.');}
         if(s.activityLogo!==undefined&&['none','hike','run','bike','kayak','sup','swim'].indexOf(s.activityLogo)<0){throw new Error('Das Aktivitätssymbol im Preset ist ungültig.');}

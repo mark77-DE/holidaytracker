@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Holidaytracker">
-<link rel="stylesheet" href="css/style.css?v=2026102111">
+<link rel="stylesheet" href="css/style.css?v=20261021172530">
 </head>
 <body>
 <header class="editor-topbar">
@@ -120,6 +120,13 @@
           <button type="button" data-fmt="c200" aria-pressed="false">200 × 200</button>
           <button type="button" data-fmt="custom" aria-pressed="false">Frei</button>
         </div>
+        <p class="label-line">DIN-Format</p>
+        <div class="seg fmtseg" role="group" aria-label="DIN-Papierformat">
+          <button type="button" data-fmt="a4p" aria-pressed="false">A4 Hoch</button>
+          <button type="button" data-fmt="a4l" aria-pressed="false">A4 Quer</button>
+          <button type="button" data-fmt="a3p" aria-pressed="false">A3 Hoch</button>
+          <button type="button" data-fmt="a3l" aria-pressed="false">A3 Quer</button>
+        </div>
         <div class="row" id="customSize" hidden>
           <label class="field" style="flex:1;margin:10px 0 0">Breite (mm)<input type="number" id="customWidth" min="50" max="1000" step="1" value="100"></label>
           <label class="field" style="flex:1;margin:10px 0 0">Höhe (mm)<input type="number" id="customHeight" min="50" max="1000" step="1" value="100"></label>
@@ -154,6 +161,7 @@
         <label class="color" id="colorHighlightRow"><span>Highlight-Labels</span><input type="color" id="cHighlight"></label>
         <label class="color">Statistikwerte<input type="color" id="cStatValue"></label>
         <label class="color">Statistiklabels<input type="color" id="cStatLabel"></label>
+        <label class="color">Statistikbox<input type="color" id="cStatsBg"></label>
         <label class="color">Datum<input type="color" id="cDate"></label>
         <label class="color">Unterüberschrift<input type="color" id="cSubtitle"></label>
       </div>
@@ -331,21 +339,22 @@
 
 
 
-<script src="js/00-fonts.js?v=20261020081610"></script>
-<script src="js/10-core.js?v=20261020081610"></script>
-<script src="js/20-track.js?v=20261020081610"></script>
-<script src="js/30-geometry.js?v=20261020081610"></script>
-<script src="js/31-render.js?v=20261020081610"></script>
-<script src="js/40-highlights.js?v=20261020081610"></script>
-<script src="js/50-osm.js?v=2026102114"></script>
-<script src="js/55-vacation.js?v=2026102111"></script>
+<script src="js/00-fonts.js?v=20261021172530"></script>
+<script src="js/10-core.js?v=20261021172530"></script>
+<script src="js/20-track.js?v=20261021172530"></script>
+<script src="js/30-geometry.js?v=20261021172530"></script>
+<script src="js/31-render.js?v=20261021172530"></script>
+<script src="js/40-highlights.js?v=20261021172530"></script>
+<script src="js/50-osm.js?v=20261021172530"></script>
+<script src="js/55-vacation.js?v=20261021172530"></script>
 <script src="js/56-vacation-source.js?v=2"></script>
-<script src="js/60-background.js?v=20261020081610"></script>
-<script src="js/61-map.js?v=20261020081610"></script>
-<script src="js/70-interaction.js?v=2026102111"></script>
-<script src="js/80-controls.js?v=20261020081610"></script>
-<script src="js/90-export.js?v=20261020081610"></script>
-<script src="js/98-start.js?v=20261020081610"></script>
-<script src="js/99-pwa.js?v=20261020081610"></script>
+<script src="js/60-background.js?v=20261021172530"></script>
+<script src="js/61-map.js?v=20261021172530"></script>
+<script src="js/70-interaction.js?v=20261021172530"></script>
+<script src="js/80-controls.js?v=20261021172530"></script>
+<script src="js/90-export.js?v=20261021172530"></script>
+<script src="js/98-start.js?v=20261021172530"></script>
+<script src="js/99-pwa.js?v=20261021172530"></script>
 </body>
 </html>
+

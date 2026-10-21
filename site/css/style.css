@@ -65,6 +65,8 @@ body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-a
 .seg button{font:inherit;font-size:14px;color:var(--text);background:var(--panel);border:0;padding:.5rem .8rem;cursor:pointer}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button[aria-pressed="true"]{background:var(--text);color:var(--bg)}
+.fmtseg{display:flex;width:100%}
+.fmtseg button{flex:1;min-width:0;padding-left:.45rem;padding-right:.45rem;white-space:nowrap}
 .label-line{font-size:13px;color:var(--muted);margin:10px 0 6px}
 .check{display:flex;gap:8px;align-items:center;font-size:14px;margin-top:10px}
 .hint{color:var(--muted);font-size:13px;margin:8px 0 0}
@@ -80,12 +82,11 @@ body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-a
 .vac-drag:active{cursor:grabbing}
 .vac-stat-option.drag-over{outline:1px dashed var(--accent);background:var(--field)}
 .vac-stat-option.dragging{opacity:.45}
-.vac-item{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:9px;padding:7px 8px;background:var(--field)}
+.vac-item{display:flex;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:9px;padding:7px 8px;background:var(--field)}
 .vac-file{display:flex;gap:8px;align-items:flex-start;min-width:0;flex:1 1 auto;font-size:13px}
 .vac-file input{margin-top:4px;accent-color:var(--accent)}
 .vac-file-info{display:flex;flex-direction:column;min-width:0;overflow-wrap:anywhere}
 .vac-file-info small{color:var(--muted);font-size:12px}
-.vac-route-poster{white-space:nowrap}
 .vac-stage-color{width:38px;height:30px;flex:0 0 38px;padding:2px;border:1px solid var(--line);border-radius:6px;background:var(--panel);cursor:pointer}
 .vac-stage-name{box-sizing:border-box;width:110px;min-width:70px;flex:0 1 110px;padding:.4rem .5rem;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--text);font:inherit;font-size:12px}
 .vac-stage-name:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
@@ -164,3 +165,4 @@ body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-a
 @media(max-width:860px){.editor-topbar{grid-template-columns:1fr auto;padding:10px 12px}.editor-tool-name{display:none}.stage{top:60px}}
 @media(max-width:420px){.editor-brand{font-size:14px}.editor-brand-mark{width:27px;height:27px}.editor-back{gap:5px;padding:7px 9px;font-size:11px}}
 .vacation-card-actions a{text-decoration:none}
+

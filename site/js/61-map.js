@@ -28,7 +28,7 @@ function worldToRel(wx,wy,z){
   return [wx/N*c-c/2-MERC_R*t.lon0*Math.PI/180, c/2-wy/N*c-t.y0];
 }
 function regionExtent(geo,margin){
-  var H=fmt().H, r=state.map.ext==='all'?{x0:0,x1:100,y0:0,y1:H}:{x0:M,x1:M+W,y0:LAY.mapT,y1:state.mapB};
+  var H=fmt().H, r=state.map.ext==='all'?{x0:0,x1:100,y0:0,y1:H}:{x0:LAY.mapL,x1:LAY.mapR,y0:LAY.mapT,y1:state.mapB};
   var X0=geo.minX+(r.x0-geo.ox)/geo.sc, X1=geo.minX+(r.x1-geo.ox)/geo.sc;
   var Yt=geo.maxY-(r.y0-geo.oy)/geo.sc, Yb=geo.maxY-(r.y1-geo.oy)/geo.sc;
   var mx=(X1-X0)*margin, my=(Yt-Yb)*margin;
@@ -40,7 +40,7 @@ function tileRange(ext,z){
 }
 function pickZoom(geo,maxZ){
   var F=fmt(), full=F.print?Math.round(F.mmW/25.4*300):F.px[0];
-  var target=full*(state.map.ext==='all'?100:W)/100;               // pixels the region will have in the export
+  var target=full*(state.map.ext==='all'?100:LAY.mapR-LAY.mapL)/100; // pixels the region will have in the export
   var ex=regionExtent(geo,0), wide=ex.X1-ex.X0, want=regionExtent(geo,0.15), z;
   for(z=5;z<maxZ;z++){
     if(wide/(2*Math.PI*MERC_R/(256*Math.pow(2,z)))>=0.9*target){break;}
@@ -131,7 +131,7 @@ function placeMap(geo){
   mapImg.setAttribute('width',f((d.Xr-d.Xl)*geo.sc));
   mapImg.setAttribute('height',f((d.Yt-d.Yb)*geo.sc));
   mapImg.setAttribute('opacity',f(state.map.op/100));
-  var r=state.map.ext==='all'?[0,0,100,H]:[M,LAY.mapT,W,state.mapB-LAY.mapT];
+  var r=state.map.ext==='all'?[0,0,100,H]:[LAY.mapL,LAY.mapT,LAY.mapR-LAY.mapL,state.mapB-LAY.mapT];
   mapClipRect.setAttribute('x',f(r[0])); mapClipRect.setAttribute('y',f(r[1]));
   mapClipRect.setAttribute('width',f(r[2])); mapClipRect.setAttribute('height',f(r[3]));
 }
@@ -158,7 +158,7 @@ $('#mapFit').addEventListener('click',function(){state.map.view={scale:1,x:0,y:0
 $('#mapZoom').addEventListener('input',function(e){state.map.view.scale=+e.target.value/100;$('#mapZoomOut').textContent=e.target.value+' %';render();});
 svg.addEventListener('wheel',function(e){
   if(!state.mapPosMode){return;}e.preventDefault();
-  var p=toSvg(e),v=state.map.view,cx=50,cy=(LAY.mapT+state.mapB)/2,old=v.scale||1,next=clamp(old*(1-e.deltaY*.0015),.65,2.5);
+  var p=toSvg(e),v=state.map.view,cx=(LAY.mapL+LAY.mapR)/2,cy=(LAY.mapT+state.mapB)/2,old=v.scale||1,next=clamp(old*(1-e.deltaY*.0015),.65,2.5);
   v.x=p.x-cx-((p.x-cx-v.x)/old)*next;v.y=p.y-cy-((p.y-cy-v.y)/old)*next;v.scale=next;
   syncMapUi();render();
 },{passive:false});

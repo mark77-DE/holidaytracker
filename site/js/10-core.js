@@ -26,7 +26,7 @@ function contrast(a,b){var l1=lum(a), l2=lum(b);return (Math.max(l1,l2)+0.05)/(M
 function palette(){
   var c=state.colors;
   return {bg:c.bg, ink:c.ink, route:c.route, profile:c.profile||c.ink,
-    highlight:c.highlight||c.ink, statValue:c.statValue||c.ink,
+    highlight:c.highlight||c.ink, statValue:c.statValue||c.ink, statsBg:c.statsBg||mixHex(c.bg,c.ink,0.08),
     statLabel:c.statLabel||mixHex(c.bg,c.ink,0.68), date:c.date||mixHex(c.bg,c.ink,0.68), subtitle:c.subtitle||mixHex(c.bg,c.ink,0.68), muted:mixHex(c.bg,c.ink,0.68)};
 }
 
@@ -39,16 +39,20 @@ var isoToday=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+
 
 var state={
   track:null, posterMode:'route', vacationTracks:[], nextVacationId:1, vacationStats:{tours:true,ascent:true,days:true,longest:true,highest:true,average:true,elapsed:true,moving:true}, vacationStatOrder:['tours','ascent','longest','moving','days','highest','average','elapsed'], title:'Brocken-Runde', region:'Harz', date:isoToday,
-  fmt:'c150', customWidth:100, customHeight:100, printBleedMm:0, safe:true, colors:{bg:'#ffffff',ink:'#1e3530',route:'#c4392d',startFlag:'#c4392d',stageLegend:'#1e3530',profile:'#1e3530',highlight:'#1e3530',statValue:'#1e3530',statLabel:'#60736c',date:'#60736c',subtitle:'#60736c'}, showStageFlags:true, stageLegendPosition:'none', stageLegendFontSize:100, stageLegendBackground:true, stageLegendOpacity:85, showEle:true, showStats:true, stats:{distance:true,ascent:true,max:true,min:true,elapsed:true,moving:true}, statsFontSize:130, plates:true, plateOpacity:94,
+  fmt:'c150', customWidth:100, customHeight:100, printBleedMm:0, safe:true, colors:{bg:'#ffffff',ink:'#1e3530',route:'#c4392d',startFlag:'#c4392d',stageLegend:'#1e3530',profile:'#1e3530',highlight:'#1e3530',statValue:'#1e3530',statLabel:'#60736c',statsBg:'#eef1ed',date:'#60736c',subtitle:'#60736c'}, showStageFlags:true, stageLegendPosition:'none', stageLegendFontSize:100, stageLegendBackground:true, stageLegendOpacity:85, showEle:true, showStats:true, stats:{distance:true,ascent:true,max:true,min:true,elapsed:true,moving:true}, statsFontSize:130, plates:true, plateOpacity:94,
   hl:[], nextId:1, addMode:false, posMode:false, mapPosMode:false, bg:null, map:{style:'none',op:70,gray:false,ext:'box',attr:true,url:'',attrText:'',maxZ:17,view:{scale:1,x:0,y:0}}, labelGap:9, labelMode:'profile', hlFontSize:100, titleFontSize:100, subtitleFontSize:100, metaFontSize:100, activityLogo:'none', showTitle:true, showSubtitle:true, showRegion:true, showDate:true, profilePlate:false, vacTextSize:100, vacLabelSize:100, vacValueSize:100, mapB:LAY.mapB
 };
 
 // ---------- Formats ----------
-// print formats are square (mm), social formats are defined in pixels; H is the poster height in units (width is always 100)
+// Print sizes use millimetres, social sizes use pixels; the SVG width is 100 units.
 var FORMATS={
-  c100: {print:true, mm:100, H:100,    K:1.2, T:7,    B:94.6,  profH:11, name:'100 × 100 mm'},
-  c150: {print:true, mm:150, H:100,    K:1,   T:7,    B:94.6,  profH:11, name:'150 × 150 mm'},
-  c200: {print:true, mm:200, H:100,    K:1,   T:7,    B:94.6,  profH:11, name:'200 × 200 mm'},
+  c100: {print:true, mmW:100, mmH:100, H:100,    K:1.2, T:7,    B:94.6,  profH:11, name:'100 × 100 mm'},
+  c150: {print:true, mmW:150, mmH:150, H:100,    K:1,   T:7,    B:94.6,  profH:11, name:'150 × 150 mm'},
+  c200: {print:true, mmW:200, mmH:200, H:100,    K:1,   T:7,    B:94.6,  profH:11, name:'200 × 200 mm'},
+  a4p:  {print:true, mmW:210, mmH:297, H:141.43,K:.714,titleScale:.714,T:5,B:137.6,profH:7.85,name:'DIN A4 Hochformat'},
+  a4l:  {print:true, mmW:297, mmH:210, H:70.71, K:.505,titleScale:.505,T:3.54,B:68,profH:5.55,name:'DIN A4 Querformat',landscape:true},
+  a3p:  {print:true, mmW:297, mmH:420, H:141.41,K:.505,titleScale:.505,T:3.54,B:138.7,profH:5.55,name:'DIN A3 Hochformat'},
+  a3l:  {print:true, mmW:420, mmH:297, H:70.71, K:.357,titleScale:.357,T:2.5,B:68.8,profH:3.93,name:'DIN A3 Querformat',landscape:true},
   story:{px:[1080,1920], H:177.78, K:1.3, T:25.5, B:142.4, profH:20, name:'Story 9:16',   tag:'story',
          hint:'WhatsApp-Status, Instagram- und Facebook-Story, Reels. 1080 × 1920 px.'},
   feed: {px:[1080,1350], H:125,    K:1.3, T:8,    B:119,   profH:15, name:'Feed 4:5',     tag:'feed',
@@ -59,8 +63,8 @@ var FORMATS={
 function fmt(){
   var base=FORMATS[state.fmt]||FORMATS.c150, add=state.printBleedMm*2;
   if(state.fmt!=='custom'&&base.print){
-    var side=base.mm+add;
-    return Object.assign({},base,{mm:side,mmW:side,mmH:side});
+    var mmW=base.mmW+add, mmH=base.mmH+add;
+    return Object.assign({},base,{mm:mmW,mmW:mmW,mmH:mmH,H:100*mmH/mmW});
   }
   if(state.fmt==='custom'){
     var mmW=state.customWidth+add, mmH=state.customHeight+add;
@@ -68,7 +72,7 @@ function fmt(){
   }
   return base;
 }
-function titleFs(){return (fmt().print?TITLE_FS:TITLE_FS*1.15)*state.titleFontSize/100;}
+function titleFs(){var F=fmt();return (F.print?TITLE_FS*(F.titleScale||1):TITLE_FS*1.15)*state.titleFontSize/100;}
 function titleStartX(){return M+(state.activityLogo&&state.activityLogo!=='none'?Math.max(4.2,titleFs()*.76)+1.2:0);}
 function subtitleFs(){return sc(2.2*state.subtitleFontSize/100);}
 function metaFs(){return sc(2.8*state.metaFontSize/100);}
@@ -76,6 +80,25 @@ function subtitleY(){return state.showTitle?LAY.titleY+titleFs()*.68+sc(.4):LAY.
 // derive the vertical layout of the current format
 function applyFormat(){
   var F=fmt();
+  LAY.landscape=!!F.landscape;
+  if(LAY.landscape){
+    var H=F.H;
+    LAY.titleY=f(F.T+titleFs()*.72);
+    LAY.dateY=LAY.regionY=f(subtitleY());
+    LAY.ruleY=f(LAY.dateY+1.8);
+    LAY.mapL=M; LAY.mapR=M+W; LAY.mapT=LAY.ruleY+2; LAY.mapB=H-22;
+    LAY.profL=M; LAY.profR=48; LAY.profB=H-8.5; LAY.profT=LAY.profB-10; LAY.axisY=H-5.5;
+    LAY.statsL=52; LAY.statsR=M+W; LAY.statsTop=LAY.profT; LAY.statsBottom=f(LAY.axisY+1.5);
+    LAY.statY=H-8.5;
+    state.mapB=LAY.mapB;
+    svg.setAttribute('viewBox','0 0 100 '+f(H));
+    $('.poster-wrap').style.setProperty('--ratio',String(100/H));
+    Array.prototype.forEach.call(document.querySelectorAll('.fmtseg button'),function(b){b.setAttribute('aria-pressed',b.getAttribute('data-fmt')===state.fmt?'true':'false');});
+    $('#fmtHint').textContent='Querformat: zentrierter Titel, Karte oben, Höhenprofil und Statistiken unten.';
+    $('#safeRow').hidden=true; $('#printOptions').hidden=!F.print; $('#customSize').hidden=state.fmt!=='custom';
+    return;
+  }
+  LAY.mapL=M; LAY.mapR=M+W; LAY.profL=M; LAY.profR=M+W; LAY.statsTop=null; LAY.statsBottom=null;
   LAY.titleY=f(F.T+titleFs()*0.735);
   LAY.dateY=LAY.titleY;
   LAY.regionY=f(LAY.dateY-metaFs()*1.1);

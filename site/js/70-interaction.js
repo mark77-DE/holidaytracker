@@ -56,7 +56,8 @@ svg.addEventListener('pointerup',endDrag);
 svg.addEventListener('pointercancel',endDrag);
 
 // ---------- Loading tracks ----------
-function loadBuiltTrack(t,name){
+function loadRaw(raw,name){
+  var t=buildTrack(raw);
   state.track=t; state.mapB=LAY.mapB; state.hl=[]; state.osm=[]; mapReset(); setAddMode(false); syncLabelModeUi(); syncStatsUi();
   if(t.date){state.date=t.date;$('#date').value=t.date;}
   var info=de(t.total/1000,1)+' km';
@@ -65,7 +66,6 @@ function loadBuiltTrack(t,name){
   if(!t.hasEle){say('Die Datei enthält keine Höhendaten, das Höhenprofil entfällt.');}
   renderOsm(); renderList(); render();
 }
-function loadRaw(raw,name){loadBuiltTrack(buildTrack(raw),name);}
 function readFile(file){
   if(!file){return;}
   var r=new FileReader();
