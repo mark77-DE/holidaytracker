@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Holidaytracker · Poster-Editor</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f5f5ef">
+<link rel="icon" href="web-icons/icon-192.png">
+<link rel="apple-touch-icon" href="web-icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Holidaytracker">
+<link rel="stylesheet" href="css/style.css?v=2026102111">
+</head>
+<body>
+<header class="editor-topbar">
+  <a class="editor-brand" href="./" aria-label="Holidaytracker-Startseite">
+    <span class="editor-brand-mark" aria-hidden="true">H</span><span>holidaytracker</span>
+  </a>
+  <span class="editor-tool-name">Poster-Editor</span>
+  <a class="editor-back" href="./"><span aria-hidden="true">←</span> Zurück zum Familienbereich</a>
+</header>
+<div class="app">
+  <section class="stage" id="stage" aria-label="Vorschau">
+    <div class="poster-wrap">
+      <svg id="poster" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Poster-Vorschau"></svg>
+    </div>
+    <p class="caption" id="caption"></p>
+  </section>
+
+  <aside class="panel">
+    <h1>Poster gestalten</h1>
+    <p class="lead" id="lead">GPX laden, Titel eintragen, Highlights platzieren, als Bild exportieren.</p>
+    <div class="mode-tabs" role="group" aria-label="Posterart">
+      <button class="btn" id="routeMode" type="button" aria-pressed="true">Routenposter</button>
+      <button class="btn" id="stagesMode" type="button" aria-pressed="false">Mehrtagestour</button>
+      <button class="btn" id="vacationMode" type="button" aria-pressed="false">Urlaubsstatistik</button>
+    </div>
+
+    <div class="group" id="routeGroup">
+      <h2>Route</h2>
+      <div class="row">
+        <label class="btn primary" for="file">GPX-Datei wählen</label>
+        <input type="file" id="file" hidden>
+        <button class="btn" id="demo" type="button">Beispielroute</button>
+      </div>
+      <p id="tinfo"></p>
+      <p class="hint">Die Datei kann auch auf die Vorschau gezogen werden. Die Höhe stammt aus der GPX-Datei und wird geglättet.</p>
+      <p id="msg" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="group" id="tracksGroup" hidden>
+      <h2 id="tracksHeading">Etappen</h2>
+      <div class="row">
+        <label class="btn primary" id="vacationFilesLabel" for="vacationFiles">Etappen-GPX laden</label>
+        <input type="file" id="vacationFiles" accept=".gpx,application/gpx+xml,application/xml,text/xml" multiple hidden>
+        <button class="btn small" id="clearVacation" type="button">Alle entfernen</button>
+      </div>
+      <p class="hint" id="tracksHint">Je Wandertag eine GPX-Datei laden. Die Etappen werden zusammen dargestellt.</p>
+      <p class="hint" id="vacationMsg" role="status" aria-live="polite"></p>
+      <div id="vacationList"></div>
+    </div>
+
+    <div class="group" id="textGroup">
+      <h2>Texte und Titel</h2>
+      <label class="field">Aktivitätssymbol am Titel
+        <select id="activityLogo"><option value="none">Keins</option><option value="hike">Wandern (hiking)</option><option value="run">Laufen (directions run)</option><option value="bike">Fahrrad (directions bike)</option><option value="kayak">Kajak (kayak)</option><option value="sup">Stand Up Paddle</option><option value="swim">Schwimmen (pool)</option></select>
+      </label>
+      <label class="field">Titel<input type="text" id="title" autocomplete="off" placeholder="z. B. Brocken"></label>
+      <label class="check"><input type="checkbox" id="showTitle" checked> Titel anzeigen</label>
+      <div class="slider"><label for="titleFontSize">Größe des Titels</label><input type="range" id="titleFontSize" min="60" max="160" step="5" value="100"><output id="titleFontSizeOut">100 %</output></div>
+      <label class="field">Unterüberschrift<input type="text" id="subtitle" autocomplete="off" placeholder="Optional"></label>
+      <label class="check"><input type="checkbox" id="showSubtitle" checked> Unterüberschrift anzeigen</label>
+      <div class="slider"><label for="subtitleFontSize">Größe der Unterüberschrift</label><input type="range" id="subtitleFontSize" min="60" max="160" step="5" value="100"><output id="subtitleFontSizeOut">100 %</output></div>
+      <label class="field" id="regionField">Region<input type="text" id="region" autocomplete="off" placeholder="z. B. Harz"></label>
+      <label class="check"><input type="checkbox" id="showRegion" checked> Region anzeigen</label>
+      <label class="field" id="dateField">Datum<input type="date" id="date"></label>
+      <label class="check" id="showDateRow"><input type="checkbox" id="showDate" checked> Datum anzeigen</label>
+      <div class="slider"><label for="metaFontSize">Größe von Region und Datum</label><input type="range" id="metaFontSize" min="60" max="160" step="5" value="100"><output id="metaFontSizeOut">100 %</output></div>
+    </div>
+
+    <div class="group" id="vacationGroup" hidden>
+      <h2 id="vacationHeading">Statistik</h2>
+      <p class="label-line">Kennzahlen im Poster</p>
+      <div class="vac-stat-options" id="vacationStatOptions">
+        <div class="vac-stat-option" data-vac-stat-item="tours"><span class="vac-drag" draggable="true" title="Ziehen zum Sortieren" aria-label="Touren sortieren">⠿</span><label class="check"><input type="checkbox" data-vac-stat="tours" checked> Touren</label></div>
+        <div class="vac-stat-option" data-vac-stat-item="ascent"><span class="vac-drag" draggable="true" title="Ziehen zum Sortieren" aria-label="Höhenmeter sortieren">⠿</span><label class="check"><input type="checkbox" data-vac-stat="ascent" checked> Höhenmeter</label></div>
+        <div class="vac-stat-option" data-vac-stat-item="days"><span class="vac-drag" draggable="true" title="Ziehen zum Sortieren" aria-label="Wandertage sortieren">⠿</span><label class="check"><input type="checkbox" data-vac-stat="days" checked> Wandertage</label></div>
+        <div class="vac-stat-option" data-vac-stat-item="longest"><span class="vac-drag" draggable="true" title="Ziehen zum Sortieren" aria-label="Längste Tour sortieren">⠿</span><label class="check"><input type="checkbox" data-vac-stat="longest" checked> Längste Tour</label></div>
+        <div class="vac-stat-option" data-vac-stat-item="highest"><span class="vac-drag" draggable="true" title="Ziehen zum Sortieren" aria-label="Höchster Punkt sortieren">⠿</span><label class="check"><input type="checkbox" data-vac-stat="highest" checked> Höchster Punkt</label></div>
+        <div class="vac-stat-option" data-vac-stat-item="average"><span class="vac-drag" draggable="true" title="Ziehen zum Sortieren" aria-label="Durchschnitt je Tour sortieren">⠿</span><label class="check"><input type="checkbox" data-vac-stat="average" checked> Ø je Tour</label></div>
+        <div class="vac-stat-option" data-vac-stat-item="elapsed"><span class="vac-drag" draggable="true" title="Ziehen zum Sortieren" aria-label="Gesamtzeit sortieren">⠿</span><label class="check"><input type="checkbox" data-vac-stat="elapsed" checked> Gesamtzeit</label></div>
+        <div class="vac-stat-option" data-vac-stat-item="moving"><span class="vac-drag" draggable="true" title="Ziehen zum Sortieren" aria-label="Bewegungszeit sortieren">⠿</span><label class="check"><input type="checkbox" data-vac-stat="moving" checked> Bewegungszeit</label></div>
+      </div>
+      <div class="slider">
+        <label for="vacTextSize">Textgröße unterhalb der Linie</label>
+        <input type="range" id="vacTextSize" min="70" max="160" step="5" value="100">
+        <output id="vacTextSizeOut">100 %</output>
+      </div>
+      <div class="slider">
+        <label for="vacLabelSize">Größe der Labels</label>
+        <input type="range" id="vacLabelSize" min="70" max="160" step="5" value="100">
+        <output id="vacLabelSizeOut">100 %</output>
+      </div>
+      <div class="slider">
+        <label for="vacValueSize">Größe der Kilometerwerte über den Balken</label>
+        <input type="range" id="vacValueSize" min="70" max="160" step="5" value="100">
+        <output id="vacValueSizeOut">100 %</output>
+      </div>
+    </div>
+
+    <div class="group" id="customizeGroup">
+      <h2>Format und Farben</h2>
+      <div id="printOptions">
+        <p class="label-line" style="margin-top:0">Leinwandformat</p>
+        <div class="seg fmtseg" role="group" aria-label="Leinwandgröße">
+          <button type="button" data-fmt="c100" aria-pressed="false">100 × 100</button>
+          <button type="button" data-fmt="c150" aria-pressed="true">150 × 150</button>
+          <button type="button" data-fmt="c200" aria-pressed="false">200 × 200</button>
+          <button type="button" data-fmt="custom" aria-pressed="false">Frei</button>
+        </div>
+        <div class="row" id="customSize" hidden>
+          <label class="field" style="flex:1;margin:10px 0 0">Breite (mm)<input type="number" id="customWidth" min="50" max="1000" step="1" value="100"></label>
+          <label class="field" style="flex:1;margin:10px 0 0">Höhe (mm)<input type="number" id="customHeight" min="50" max="1000" step="1" value="100"></label>
+        </div>
+        <label class="field" style="margin-top:10px">Druckzugabe je Seite (mm)<input type="number" id="printBleed" min="0" max="10" step="0.5" value="0"></label>
+        <p class="hint">Die Zugabe kommt an jeder Seite hinzu: 100 × 100 mm mit 2 mm je Seite ergibt 104 × 104 mm.</p>
+      </div>
+      <p class="label-line">Social Media</p>
+      <div class="seg fmtseg" role="group" aria-label="Social-Media-Format">
+        <button type="button" data-fmt="story" aria-pressed="false">9:16 Story</button>
+        <button type="button" data-fmt="feed" aria-pressed="false">4:5 Feed</button>
+        <button type="button" data-fmt="sq" aria-pressed="false">1:1 Quadrat</button>
+      </div>
+      <p class="hint" id="fmtHint"></p>
+      <label class="check" id="safeRow" hidden><input type="checkbox" id="optSafe" checked> App-Bereiche der Story einblenden</label>
+      <p class="label-line">Farben</p>
+      <div class="presets" id="presets" role="group" aria-label="Farbvorlagen"></div>
+      <div class="preset-tools">
+        <label class="color">Name des Presets<input type="text" id="presetName" value="Eigenes Preset" maxlength="40"></label>
+        <button type="button" id="exportPreset">Preset exportieren</button>
+        <button type="button" id="importPreset">Preset importieren</button>
+        <input type="file" id="presetFile" accept=".json,application/json" hidden>
+      </div>
+      <p class="hint" id="presetHint" role="status" aria-live="polite"></p>
+      <div class="colors">
+        <label class="color">Hintergrund<input type="color" id="cBg"></label>
+        <label class="color">Schrift und Linien<input type="color" id="cInk"></label>
+        <label class="color"><span id="colorRouteLabel">Route</span><input type="color" id="cRoute"></label>
+        <label class="color" id="colorStartFlagRow" hidden><span>Startflagge</span><input type="color" id="cStartFlag"></label>
+        <label class="color" id="stageLegendColorRow" hidden>Etappenlegende<input type="color" id="cStageLegend"></label>
+        <label class="color" id="colorProfileRow"><span>Höhenprofil</span><input type="color" id="cProfile"></label>
+        <label class="color" id="colorHighlightRow"><span>Highlight-Labels</span><input type="color" id="cHighlight"></label>
+        <label class="color">Statistikwerte<input type="color" id="cStatValue"></label>
+        <label class="color">Statistiklabels<input type="color" id="cStatLabel"></label>
+        <label class="color">Datum<input type="color" id="cDate"></label>
+        <label class="color">Unterüberschrift<input type="color" id="cSubtitle"></label>
+      </div>
+      <label class="check" id="stageFlagsRow" hidden><input type="checkbox" id="showStageFlags" checked> Start- und Zielflaggen anzeigen</label>
+      <div class="field" id="stageLegendRow" hidden><label for="stageLegendPosition">Legendenposition</label><select id="stageLegendPosition"><option value="none">Ausblenden</option><option value="top">Oben</option><option value="bottom">Unten</option><option value="left">Links</option><option value="right">Rechts</option></select></div>
+      <div class="slider" id="stageLegendSizeRow" hidden><label for="stageLegendFontSize">Legendentextgröße</label><input type="range" id="stageLegendFontSize" min="70" max="160" step="5" value="100"><output id="stageLegendFontSizeOut">100 %</output></div>
+      <label class="check" id="stageLegendBackgroundRow" hidden><input type="checkbox" id="stageLegendBackground" checked> Legendenbox anzeigen</label>
+      <div class="slider" id="stageLegendOpacityRow" hidden><label for="stageLegendOpacity">Legendenbox-Deckkraft</label><input type="range" id="stageLegendOpacity" min="0" max="100" step="5" value="85"><output id="stageLegendOpacityOut">85 %</output></div>
+      <p class="hint" id="contrastHint" style="color:var(--accent)"></p>
+      <label class="check" id="optEleRow"><input type="checkbox" id="optEle" checked> Höhe an den Highlights anzeigen</label>
+      <label class="check" id="optStatsRow"><input type="checkbox" id="optStats" checked> Kennzahlen unten anzeigen</label>
+      <div id="statsOptions" style="margin-left:20px">
+        <label class="check"><input type="checkbox" data-stat="distance" checked> Strecke</label>
+        <label class="check"><input type="checkbox" data-stat="ascent" checked> Höhenmeter (HM)</label>
+        <label class="check"><input type="checkbox" data-stat="max" checked> Höchster Punkt</label>
+        <label class="check"><input type="checkbox" data-stat="min" checked> Tiefster Punkt</label>
+        <label class="check"><input type="checkbox" data-stat="elapsed" checked> Gesamtzeit</label>
+        <label class="check"><input type="checkbox" data-stat="moving" checked> Zeit in Bewegung (geschätzt)</label>
+        <p class="hint">Geschätzt aus GPS-Zeitstempeln; Pausen und Lücken über 5 Minuten zählen nicht als Bewegungszeit.</p>
+      </div>
+      <div class="slider">
+        <label for="statsFont">Schriftgröße der Statistiken</label>
+        <input type="range" id="statsFont" min="80" max="180" step="5" value="130">
+        <output id="statsFontOut">130 %</output>
+      </div>
+      <label class="check" id="optPlatesRow"><input type="checkbox" id="optPlates" checked> Beschriftungen hinterlegen</label>
+      <label class="check" id="profilePlateRow"><input type="checkbox" id="profilePlate"> Höhenprofil und Statistik hinterlegen</label>
+      <div class="slider" id="plateOpacityRow">
+        <label for="plateOpacity">Deckkraft der Box-Hintergründe</label>
+        <input type="range" id="plateOpacity" min="0" max="100" step="1" value="94">
+        <output id="plateOpacityOut">94 %</output>
+      </div>
+    </div>
+
+    <div class="group" id="backgroundGroup">
+      <h2>Hintergrundbild</h2>
+      <div class="row">
+        <label class="btn" for="bgFile">Bild wählen</label>
+        <input type="file" id="bgFile" accept="image/*" hidden>
+        <button class="btn small" id="bgRemove" type="button" hidden>Entfernen</button>
+      </div>
+      <div id="bgCtl" hidden>
+        <div class="slider">
+          <label for="bgT">Transparenz</label>
+          <input type="range" id="bgT" min="0" max="95" value="65">
+          <output id="bgTOut">65 %</output>
+        </div>
+        <div class="slider">
+          <label for="bgS">Zoom</label>
+          <input type="range" id="bgS" min="50" max="400" value="100">
+          <output id="bgSOut">100 %</output>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" id="bgPos" type="button" aria-pressed="false">Bild positionieren</button>
+          <button class="btn" id="bgFit" type="button">Einpassen</button>
+          <button class="btn" id="bgCrop" type="button">Auf Format zuschneiden</button>
+          <button class="btn" id="bgOrig" type="button" hidden>Original</button>
+        </div>
+        <p class="hint">Positionieren: Bild auf der Vorschau ziehen, mit Mausrad oder Zoom-Regler skalieren. „Einpassen“ füllt das Format, „Zuschneiden“ behält nur den sichtbaren Ausschnitt.</p>
+      </div>
+    </div>
+
+    <div class="group" id="mapGroup">
+      <h2>Kartenhintergrund</h2>
+      <label class="field">Stil
+        <select id="mapStyle">
+          <option value="none">Keiner</option>
+          <option value="topo">Topo (OpenTopoMap)</option>
+          <option value="osm">Standard (OpenStreetMap)</option>
+          <option value="custom">Eigene Kachel-URL …</option>
+        </select>
+      </label>
+      <div id="mapCtl" hidden>
+        <div class="row" style="margin:8px 0">
+          <button class="btn small" id="mapPos" type="button" aria-pressed="false">Karte positionieren</button>
+          <button class="btn small" id="mapFit" type="button">Ansicht zurücksetzen</button>
+        </div>
+        <div class="slider">
+          <label for="mapZoom">Kartenzoom</label>
+          <input type="range" id="mapZoom" min="65" max="250" step="1" value="100">
+          <output id="mapZoomOut">100 %</output>
+        </div>
+        <p class="hint">Im Poster ziehen, um Karte und Route zu verschieben. Mausrad oder Zoomregler ändert den Ausschnitt.</p>
+        <div id="mapCustom" hidden>
+          <label class="field">Kachel-URL<input type="text" id="mapUrl" placeholder="https://…/{z}/{x}/{y}.png" autocomplete="off"></label>
+          <label class="field">Quellenangabe<input type="text" id="mapAttrText" placeholder="© Anbieter, © OpenStreetMap-Mitwirkende" autocomplete="off"></label>
+        </div>
+        <div class="slider">
+          <label for="mapOp">Deckkraft</label>
+          <input type="range" id="mapOp" min="10" max="100" value="70">
+          <output id="mapOpOut">70 %</output>
+        </div>
+        <label class="check"><input type="checkbox" id="mapGray"> Graustufen</label>
+        <label class="field" style="margin-top:10px">Ausdehnung
+          <select id="mapExt"><option value="box">Nur Kartenbereich</option><option value="all">Ganzes Poster</option></select>
+        </label>
+        <label class="check"><input type="checkbox" id="mapAttr" checked> Quellenangabe auf dem Poster</label>
+        <p class="hint" id="mapAttrHint"></p>
+        <p class="hint" id="mapStatus"></p>
+      </div>
+    </div>
+
+    <div class="group" id="highlightsGroup">
+      <h2>Highlights suchen</h2>
+      <div class="row">
+        <button class="btn" id="addHl" type="button" aria-pressed="false">Highlight setzen</button>
+        <button class="btn" id="peaks" type="button">Gipfel vorschlagen</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="osm" type="button">Vorschläge aus OpenStreetMap</button>
+        <label class="inline">Abstand
+          <select id="osmR"><option value="100">100 m</option><option value="200">200 m</option><option value="300" selected>300 m</option><option value="500">500 m</option></select>
+        </label>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <label class="field" style="flex:1;margin:0">Ort oder Highlight suchen
+          <input type="search" id="osmSearch" placeholder="z. B. Brocken" autocomplete="off">
+        </label>
+        <button class="btn" id="osmSearchBtn" type="button">Suchen</button>
+      </div>
+      <div id="osmbox" hidden>
+        <div id="osmlist"></div>
+        <button class="btn primary small" id="osmAdd" type="button" style="margin-top:8px">Auswahl übernehmen</button>
+      </div>
+      <p class="hint">„Highlight setzen“ und dann auf Route oder Höhenprofil tippen. Position und optionale Höhenangabe lassen sich anschließend in der Highlight-Liste über Kilometer und Meter anpassen. Die nummerierten Marker lassen sich entlang der Route ziehen, die Beschriftung frei verschieben und über den Regler drehen.</p>
+      <div class="slider">
+        <label for="hlFont">Schriftgröße der Beschriftungen</label>
+        <input type="range" id="hlFont" min="70" max="160" step="5" value="100">
+        <output id="hlFontOut">100 %</output>
+      </div>
+      <label class="field" style="margin-top:10px">Automatische Labels ausrichten an
+        <select id="labelMode"><option value="profile">Höhenprofil</option><option value="route">Route</option></select>
+      </label>
+      <div class="slider">
+        <label for="gap" id="gapLabel">Abstand zum höchsten Punkt</label>
+        <input type="range" id="gap" min="3" max="16" step="0.5" value="9">
+        <output id="gapOut">9,0</output>
+      </div>
+      <p class="hint" id="ovl" style="color:var(--accent)"></p>
+      <button class="btn small" id="resetPos" type="button">Label-Positionen zurücksetzen</button>
+      <div id="hlist"></div>
+    </div>
+
+    <div class="group" id="exportGroup">
+      <h2>Export</h2>
+      <div class="row">
+        <button class="btn primary" id="expPng" type="button">PNG (300 dpi)</button>
+        <button class="btn" id="expSvg" type="button">SVG</button>
+        <button class="btn" id="shareBtn" type="button" hidden>Teilen …</button>
+      </div>
+      <p class="hint">PNG ist für den Druck am sichersten, die Schrift ist dort fest eingebettet.</p>
+    </div>
+  </aside>
+</div>
+<footer class="site-footer">
+  <span>Holidaytracker · Poster-Editor</span>
+  <nav aria-label="Rechtliche Informationen">
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+    <a href="nutzung.html">Nutzungshinweise</a>
+  </nav>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="js/00-fonts.js?v=20261020081610"></script>
+<script src="js/10-core.js?v=20261020081610"></script>
+<script src="js/20-track.js?v=20261020081610"></script>
+<script src="js/30-geometry.js?v=20261020081610"></script>
+<script src="js/31-render.js?v=20261020081610"></script>
+<script src="js/40-highlights.js?v=20261020081610"></script>
+<script src="js/50-osm.js?v=2026102114"></script>
+<script src="js/55-vacation.js?v=2026102111"></script>
+<script src="js/56-vacation-source.js?v=2"></script>
+<script src="js/60-background.js?v=20261020081610"></script>
+<script src="js/61-map.js?v=20261020081610"></script>
+<script src="js/70-interaction.js?v=2026102111"></script>
+<script src="js/80-controls.js?v=20261020081610"></script>
+<script src="js/90-export.js?v=20261020081610"></script>
+<script src="js/98-start.js?v=20261020081610"></script>
+<script src="js/99-pwa.js?v=20261020081610"></script>
+</body>
+</html>

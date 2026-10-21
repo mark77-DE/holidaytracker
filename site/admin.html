@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="de"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#173c35">
+<title>Benutzerverwaltung – Holidaytracker</title><link rel="stylesheet" href="css/landing.css?v=5"></head>
+<body><div class="page-shell admin-page-shell">
+<header class="topbar"><a class="brand" href="/" aria-label="Holidaytracker Startseite"><span class="brand-mark" aria-hidden="true">H</span><span>holidaytracker</span></a><a class="quiet-link" href="/">Zum Familienbereich <span aria-hidden="true">↗</span></a></header>
+<main class="admin-page-main"><div id="admin-loading" class="admin-loading">Benutzerkonto wird geprüft …</div>
+<section id="admin-denied" class="auth-card admin-page-card" hidden><p class="card-kicker">Kein Zugriff</p><h1>Adminrechte erforderlich</h1><p class="card-intro">Diese Seite ist nur für Familien-Admins verfügbar.</p><a class="primary-button" href="/">Zurück zum Familienbereich <span aria-hidden="true">→</span></a></section>
+<section id="admin-app" hidden><div class="admin-page-heading"><div><p class="eyebrow"><span class="eyebrow-dot"></span> Familienzugang</p><h1>Benutzerverwaltung</h1><p class="admin-page-intro">Einladungen erstellen und Zugänge für eure Familie verwalten.</p></div><span class="admin-badge">ADMIN</span></div>
+<div class="admin-page-grid">
+<section class="auth-card admin-page-card"><p class="card-kicker">Neuen Zugang einrichten</p><h2>Einladung erstellen</h2><p class="card-intro">Der Einladungslink ist sieben Tage gültig. Teile ihn direkt mit der eingeladenen Person.</p>
+<form id="create-invite-form" class="invite-create"><label for="new-invite-email">E-Mail-Adresse</label><div class="invite-row"><input id="new-invite-email" type="email" placeholder="person@beispiel.de" required><button type="submit" aria-label="Einladung erstellen">+</button></div><p class="form-message" id="admin-message" role="status" aria-live="polite"></p></form>
+<div id="invite-result" class="invite-result" hidden><label for="invite-url">Persönlicher Einladungslink</label><div class="invite-row"><input id="invite-url" type="text" readonly><button id="copy-invite" type="button">Kopieren</button></div><p id="invite-expiry"></p></div></section>
+<section class="auth-card admin-page-card"><p class="card-kicker">Konten und Rollen</p><h2>Familienmitglieder</h2><p class="card-intro">Zugänge können vorübergehend gesperrt oder wieder aktiviert werden. Das eigene Admin-Konto bleibt geschützt.</p><p class="form-message" id="user-message" role="status" aria-live="polite"></p><div id="user-list"><p class="empty-state">Wird geladen …</p></div></section></div>
+<section class="auth-card admin-page-card pending-invites admin-page-invites"><h2>Offene Einladungen</h2><div id="invite-list"><p class="empty-state">Wird geladen …</p></div></section></section></main>
+<footer class="footer"><span>Holidaytracker <span id="year"></span></span><a href="/">Zurück zum Familienbereich</a></footer></div><script src="js/admin.js?v=1"></script></body></html>

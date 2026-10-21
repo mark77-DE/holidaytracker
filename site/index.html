@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#173c35">
+  <meta name="description" content="Urlaube, Wandertage und GPX-Touren an einem Ort sammeln.">
+  <title>Holidaytracker – Reisen, die bleiben</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="web-icons/icon-192.png">
+  <link rel="apple-touch-icon" href="web-icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/landing.css?v=7">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Holidaytracker Startseite"><span class="brand-mark" aria-hidden="true">H</span><span>holidaytracker</span></a>
+      <a class="quiet-link" href="#anmelden">Zum Login <span aria-hidden="true">↗</span></a>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> Für eure gemeinsamen Abenteuer</p>
+          <h1 id="hero-title">Urlaub erleben.<br><em>Für später festhalten.</em></h1>
+          <p class="hero-lead">Ein Ort für eure Reisen, Wandertage und Erinnerungen. Sammelt GPX-Routen, schreibt unterwegs Tagebuch und gestaltet aus euren Touren ein persönliches Druckmotiv.</p>
+          <div class="feature-pills"><span><b>01</b> Urlaube sammeln</span><span><b>02</b> Erlebnisse festhalten</span><span><b>03</b> Touren drucken</span></div>
+          <div class="route-art">
+            <svg viewBox="0 0 720 260" role="img" aria-label="Wanderweg durch die Berge">
+              <defs><linearGradient id="sky" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#dce9da"/><stop offset="1" stop-color="#f1dfc3"/></linearGradient></defs>
+              <rect width="720" height="260" rx="20" fill="url(#sky)"/><circle cx="555" cy="66" r="28" fill="#f0a25e"/>
+              <path d="M0 183 132 68l89 91 104-119 160 151 90-79 145 91v57H0Z" fill="#8da99a"/>
+              <path d="m132 68 39 42-37-12-30 28Zm193-28 51 61-48-18-34 24-37-3Zm250 72 40 39-45-14-32 16Z" fill="#f2f1e6"/>
+              <path d="M0 209q95-53 183 0t176-8 176 22 185-20v57H0Z" fill="#557866"/>
+              <path d="M76 260c47-57 92-21 134-69s79-49 128-13 76 28 121-17 83-26 117 9 70 21 108-23" fill="none" stroke="#f7c978" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 12"/>
+              <circle cx="76" cy="260" r="8" fill="#fff" stroke="#b64b32" stroke-width="5"/><circle cx="684" cy="147" r="8" fill="#fff" stroke="#b64b32" stroke-width="5"/>
+            </svg>
+            <div class="art-note"><span class="note-icon">↗</span><span><b>Euer Weg bleibt euer</b><small>Privat auf eurem Server</small></span></div>
+          </div>
+        </div>
+        <aside class="auth-card" id="anmelden" aria-labelledby="auth-title">
+          <div class="card-topline"><span class="lock-icon" aria-hidden="true">⌑</span><span>Privater Familienbereich</span></div>
+          <section id="login-view">
+            <p class="card-kicker">Schön, dass du da bist</p><h2 id="auth-title">Anmelden</h2>
+            <p class="card-intro">Melde dich an, um eure Reisen weiterzuführen.</p>
+            <form id="login-form" class="auth-form">
+              <label for="login-email">E-Mail-Adresse</label><input id="login-email" type="email" autocomplete="username" placeholder="name@beispiel.de" required>
+              <label for="login-password">Passwort</label><input id="login-password" type="password" autocomplete="current-password" placeholder="Dein Passwort" required>
+              <button class="primary-button" type="submit">Anmelden <span aria-hidden="true">→</span></button>
+              <p class="form-message" id="login-message" role="status" aria-live="polite"></p>
+              <a class="offline-link" id="offline-editor-link" href="/poster.html" hidden>Poster-Editor offline öffnen</a>
+            </form>
+            <div class="invite-note"><span aria-hidden="true">✳</span><p>Neu hier? Ein Familien-Admin kann dir einen persönlichen Einladungslink erstellen.</p></div>
+          </section>
+          <section id="invite-view" hidden>
+            <p class="card-kicker">Du bist eingeladen</p><h2>Konto anlegen</h2>
+            <p class="card-intro">Lege dein persönliches Passwort fest. Der Einladungslink ist nur einmal nutzbar.</p>
+            <form id="invite-form" class="auth-form">
+              <label for="invite-email">Eingeladen für</label><input id="invite-email" type="email" readonly>
+              <label for="invite-password">Passwort <span class="label-hint">mindestens 12 Zeichen</span></label><input id="invite-password" type="password" autocomplete="new-password" minlength="12" required>
+              <label for="invite-confirm">Passwort wiederholen</label><input id="invite-confirm" type="password" autocomplete="new-password" minlength="12" required>
+              <button class="primary-button" type="submit">Konto erstellen <span aria-hidden="true">→</span></button>
+              <p class="form-message" id="invite-message" role="status" aria-live="polite"></p>
+            </form>
+          </section>
+          <section id="dashboard-view" hidden>
+            <p class="card-kicker">Euer privater Bereich</p><h2>Willkommen zurück</h2>
+            <p class="card-intro" id="welcome-copy"></p>
+            <a class="primary-button app-link" href="/poster.html">Poster-Editor öffnen <span aria-hidden="true">→</span></a>
+            <a class="primary-button app-link admin-page-link" id="admin-page-link" href="/admin.html" hidden>Benutzerverwaltung öffnen <span aria-hidden="true">→</span></a>
+            <section class="vacation-manager" aria-labelledby="vacation-title">
+              <div class="section-heading"><div><p class="card-kicker">01 · Reisen sammeln</p><h3 id="vacation-title">Eure Urlaube</h3></div><span class="section-count" id="vacation-count">0</span></div>
+              <form id="vacation-form" class="vacation-form">
+                <input id="vacation-id" type="hidden">
+                <label class="vacation-field">Name des Urlaubs<input id="vacation-title-input" type="text" maxlength="120" placeholder="z. B. Sommer in Südtirol" required></label>
+                <label class="vacation-field">Reiseziel <span class="optional-label">optional</span><input id="vacation-destination" type="text" maxlength="120" placeholder="Ort oder Region"></label>
+                <div class="date-fields"><label class="vacation-field">Von<input id="vacation-start" type="date" required></label><label class="vacation-field">Bis<input id="vacation-end" type="date" required></label></div>
+                <label class="vacation-field">Notiz <span class="optional-label">optional</span><textarea id="vacation-notes" rows="2" maxlength="4000" placeholder="Was möchtet ihr euch merken?"></textarea></label>
+                <div class="vacation-actions"><button class="primary-button vacation-submit" id="vacation-submit" type="submit">Urlaub speichern <span aria-hidden="true">→</span></button><button class="cancel-edit" id="vacation-cancel" type="button" hidden>Abbrechen</button></div>
+                <p class="form-message" id="vacation-message" role="status" aria-live="polite"></p>
+              </form>
+              <div class="vacation-list" id="vacation-list"><p class="empty-state">Urlaube werden geladen …</p></div>
+              <p class="feature-next-note">Als Nächstes folgen Tagebuch und GPX-Dateien zu jedem Urlaub.</p>
+            </section>
+            <button class="logout-button" id="logout-button" type="button">Abmelden</button>
+          </section>
+          <p class="privacy-foot"><span aria-hidden="true">⌂</span> Eure Daten bleiben auf dem Server, den eure Familie betreibt.</p>
+        </aside>
+      </section>
+      <section class="below-hero"><p><span class="tiny-line"></span> Ein gemeinsamer Platz für all die kleinen und großen Wege.</p><span>Für unterwegs gemacht · Von euch selbst gehostet</span></section>
+    </main>
+    <footer class="footer"><span>Holidaytracker <span id="year"></span></span><nav><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="nutzung.html">Nutzungshinweise</a></nav></footer>
+  </div>
+  <script src="js/landing.js?v=9"></script>
+  <script src="js/99-pwa.js?v=2026102102"></script>
+</body>
+</html>
