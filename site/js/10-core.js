@@ -72,11 +72,11 @@ function fmt(){
   }
   return base;
 }
-function titleFs(){var F=fmt();return (F.print?TITLE_FS*(F.titleScale||1):TITLE_FS*1.15)*state.titleFontSize/100;}
+function titleFs(){var F=fmt();return (F.print?TITLE_FS:TITLE_FS*2.15)*state.titleFontSize/100;}
 function titleStartX(){return M+(state.activityLogo&&state.activityLogo!=='none'?Math.max(4.2,titleFs()*.76)+1.2:0);}
-function subtitleFs(){return sc(2.2*state.subtitleFontSize/100);}
-function metaFs(){return sc(2.8*state.metaFontSize/100);}
-function subtitleY(){return state.showTitle?LAY.titleY+titleFs()*.68+sc(.4):LAY.titleY;}
+function subtitleFs(){return fs(2.2*state.subtitleFontSize/100);}
+function metaFs(){return fs(2.8*state.metaFontSize/100);}
+function subtitleY(){return state.showTitle?LAY.titleY+titleFs()*.68+fs(.4):LAY.titleY;}
 // derive the vertical layout of the current format
 function applyFormat(){
   var F=fmt();
@@ -103,10 +103,10 @@ function applyFormat(){
   LAY.dateY=LAY.titleY;
   LAY.regionY=f(LAY.dateY-metaFs()*1.1);
   var hasSubtitle=state.showSubtitle&&String(state.subtitle||'').trim();
-  var contentBottom=LAY.titleY+sc(3.6);
-  if(state.showTitle){contentBottom=Math.max(contentBottom,LAY.titleY+titleFs()*.2+sc(2.3));}
-  if(hasSubtitle){contentBottom=Math.max(contentBottom,subtitleY()+subtitleFs()*.25+sc(1));}
-  if(state.showRegion||state.showDate){contentBottom=Math.max(contentBottom,LAY.dateY+metaFs()*.25+sc(1));}
+  var contentBottom=LAY.titleY+fs(3.6);
+  if(state.showTitle){contentBottom=Math.max(contentBottom,LAY.titleY+titleFs()*.2+fs(2.3));}
+  if(hasSubtitle){contentBottom=Math.max(contentBottom,subtitleY()+subtitleFs()*.25+fs(1));}
+  if(state.showRegion||state.showDate){contentBottom=Math.max(contentBottom,LAY.dateY+metaFs()*.25+fs(1));}
   LAY.ruleY=f(contentBottom);
   LAY.mapT=f(LAY.ruleY+3.6);
   var B=F.B-(attrOn()?sc(3.3):0);                       // stats move up when a map attribution is shown
@@ -134,7 +134,8 @@ function f(n){return +n.toFixed(2);}
 function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
 // scale factor for small details; the 100 mm format needs relatively larger text and pins
 function sc(v){return +(v*fmt().K).toFixed(2);}
-function hlFs(v,hl){return sc(v*state.hlFontSize/100*(hl&&hl.size!=null?hl.size:100)/100);}
+function fs(v){return +((fmt().print?v:v*fmt().K)).toFixed(2);}
+function hlFs(v,hl){return fs(v*state.hlFontSize/100*(hl&&hl.size!=null?hl.size:100)/100);}
 function de(n,dec){dec=dec||0;return n.toLocaleString('de-DE',{minimumFractionDigits:dec,maximumFractionDigits:dec});}
 function svgEl(tag,attrs,parent,text){
   var e=document.createElementNS(NS,tag);

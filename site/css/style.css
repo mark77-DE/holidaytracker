@@ -165,4 +165,8 @@ body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-a
 @media(max-width:860px){.editor-topbar{grid-template-columns:1fr auto;padding:10px 12px}.editor-tool-name{display:none}.stage{top:60px}}
 @media(max-width:420px){.editor-brand{font-size:14px}.editor-brand-mark{width:27px;height:27px}.editor-back{gap:5px;padding:7px 9px;font-size:11px}}
 .vacation-card-actions a{text-decoration:none}
+.vac-item{flex-wrap:wrap}
+.vac-file{flex:1 1 100%}
+.vac-route-poster,.vac-item>.btn.small{flex:0 0 auto;white-space:nowrap}
+
 

@@ -1,10 +1,10 @@
 // Holidaytracker service worker. Keep the public shell and poster assets available offline,
 // but always check authentication online before serving the protected poster page or API.
-var BUILD='20261021172530';
+var BUILD='20261022082922';
 var CACHE='holidaytracker-'+BUILD;
 var AUTH_CACHE='holidaytracker-authenticated-'+BUILD;
 var SHARED='wander-poster-shared';
-var ASSETS=["./","index.html","manifest.webmanifest","css/landing.css?v=7","css/style.css?v=20261021172530","js/landing.js?v=9","js/00-fonts.js?v=20261021172530","js/10-core.js?v=20261021172530","js/20-track.js?v=20261021172530","js/30-geometry.js?v=20261021172530","js/31-render.js?v=20261021172530","js/40-highlights.js?v=20261021172530","js/50-osm.js?v=20261021172530","js/55-vacation.js?v=20261021172530","js/56-vacation-source.js?v=2","js/60-background.js?v=20261021172530","js/61-map.js?v=20261021172530","js/70-interaction.js?v=20261021172530","js/80-controls.js?v=20261021172530","js/90-export.js?v=20261021172530","js/98-start.js?v=20261021172530","js/99-pwa.js?v=20261021172530","impressum.html","datenschutz.html","nutzung.html","web-icons/apple-touch-icon.png","web-icons/icon-192.png","web-icons/icon-512.png","web-icons/icon-maskable-512.png"];
+var ASSETS=["./","index.html","manifest.webmanifest","css/landing.css?v=7","css/style.css?v=20261022082922","js/landing.js?v=9","js/00-fonts.js?v=20261022082922","js/10-core.js?v=20261022082922","js/20-track.js?v=20261022082922","js/30-geometry.js?v=20261022082922","js/31-render.js?v=20261022082922","js/40-highlights.js?v=20261022082922","js/50-osm.js?v=20261022082922","js/55-vacation.js?v=20261022082922","js/56-vacation-source.js?v=3","js/60-background.js?v=20261022082922","js/61-map.js?v=20261022082922","js/70-interaction.js?v=20261022082922","js/80-controls.js?v=20261022082922","js/90-export.js?v=20261022082922","js/98-start.js?v=20261022082922","js/99-pwa.js?v=20261022082922","impressum.html","datenschutz.html","nutzung.html","web-icons/apple-touch-icon.png","web-icons/icon-192.png","web-icons/icon-512.png","web-icons/icon-maskable-512.png"];
 self.addEventListener('install',function(e){
   e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(ASSETS);}).then(function(){return self.skipWaiting();}));
 });
@@ -47,6 +47,3 @@ self.addEventListener('fetch',function(e){
   }
   e.respondWith(caches.match(req,{ignoreSearch:true}).then(function(hit){return hit||fetch(req);}));
 });
-
-
-

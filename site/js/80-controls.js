@@ -93,12 +93,8 @@ function applyFormatDefaults(key,previousKey){
   var nextFormat=FORMATS[key],oldFormat=FORMATS[previousKey];
   if(nextFormat&&nextFormat.print&&(!oldFormat||!oldFormat.print)){state.colors.bg='#ffffff';}
   state.hlFontSize=compact?90:100; $('#hlFont').value=state.hlFontSize; $('#hlFontOut').textContent=state.hlFontSize+' %';
-  state.vacTextSize=100; $('#vacTextSize').value=100; $('#vacTextSizeOut').textContent='100 %';
-  state.vacLabelSize=100; $('#vacLabelSize').value=100; $('#vacLabelSizeOut').textContent='100 %';
-  state.vacValueSize=100; $('#vacValueSize').value=100; $('#vacValueSizeOut').textContent='100 %';
   state.labelGap=compact?4:9; $('#gap').value=state.labelGap; $('#gapOut').textContent=de(state.labelGap,1);
   state.plates=!compact; $('#optPlates').checked=state.plates;
-  state.colors.statLabel=compact?state.colors.statValue:mixHex(state.colors.bg,state.colors.ink,0.68);
   state.map.op=compact?65:70; $('#mapOp').value=state.map.op; $('#mapOpOut').textContent=state.map.op+' %';
   syncColors();
 }

@@ -52,7 +52,7 @@ function render(){
   header+='<line x1="'+M+'" x2="'+headerR+'" y1="'+LAY.ruleY+'" y2="'+LAY.ruleY+'" stroke="'+pal.ink+'" stroke-opacity=".3" stroke-width=".2"/>';
 
   if(!t){
-    h+='<text x="50" y="'+f(fmt().H/2)+'" font-size="'+sc(3.6)+'" font-weight="500" text-anchor="middle" fill="'+pal.muted+'">GPX-Datei laden oder Beispielroute wählen</text>';
+    h+='<text x="50" y="'+f(fmt().H/2)+'" font-size="'+fs(3.6)+'" font-weight="500" text-anchor="middle" fill="'+pal.muted+'">GPX-Datei laden oder Beispielroute wählen</text>';
   }else{
     // route
     var d='M'+geo.mp.map(function(p){return f(p[0])+' '+f(p[1]);}).join('L');
@@ -81,7 +81,7 @@ function render(){
       var x=geo.profX(q*step*1000), lab=de(q*step,step<1?1:0)+(q===count?' km':'');
       var anchor=q===0?'start':(x>LAY.profR-5?'end':'middle');
       h+='<line x1="'+f(x)+'" x2="'+f(x)+'" y1="'+LAY.profB+'" y2="'+(LAY.profB+0.9)+'" stroke="'+pal.ink+'" stroke-opacity=".55" stroke-width=".25"/>';
-      h+='<text x="'+f(x)+'" y="'+LAY.axisY+'" font-size="'+sc(2.2)+'" font-weight="500" text-anchor="'+anchor+'" fill="'+pal.muted+'">'+lab+'</text>';
+      h+='<text x="'+f(x)+'" y="'+LAY.axisY+'" font-size="'+fs(2.2)+'" font-weight="500" text-anchor="'+anchor+'" fill="'+pal.muted+'">'+lab+'</text>';
     }
 
     // compact two-line stats, laid out in equal-width columns after rendering
@@ -96,11 +96,11 @@ function render(){
       if(LAY.landscape&&items.length){
         var statH=LAY.statsBottom-LAY.statsTop,cols=3,cellW=(LAY.statsR-LAY.statsL)/cols,rowH=statH/Math.ceil(items.length/cols);
         h+='<rect x="'+f(LAY.statsL-1)+'" y="'+f(LAY.statsTop)+'" width="'+f(LAY.statsR-LAY.statsL+1.5)+'" height="'+f(statH)+'" rx="1.8" fill="'+pal.statsBg+'" fill-opacity="'+(state.plateOpacity/100)+'"/>';
-        items.forEach(function(item,i){var row=Math.floor(i/cols),col=i%cols,cx=LAY.statsL+cellW*(col+.5),vy=LAY.statsTop+row*rowH+rowH*.43,ly=vy+sc(2.1),scale=state.statsFontSize/100;h+='<g class="stat landscape-stat"><text class="stat-value" x="'+f(cx)+'" y="'+f(vy)+'" font-size="'+sc(2.05*scale)+'" font-weight="600" text-anchor="middle" fill="'+pal.statValue+'">'+esc(item.value)+'</text><text class="stat-label" x="'+f(cx)+'" y="'+f(ly)+'" font-size="'+sc(1.28*scale)+'" font-weight="500" text-anchor="middle" fill="'+pal.statLabel+'">'+esc(item.label)+'</text></g>';});
+        items.forEach(function(item,i){var row=Math.floor(i/cols),col=i%cols,cx=LAY.statsL+cellW*(col+.5),vy=LAY.statsTop+row*rowH+rowH*.43,ly=vy+fs(2.1),scale=state.statsFontSize/100;h+='<g class="stat landscape-stat"><text class="stat-value" x="'+f(cx)+'" y="'+f(vy)+'" font-size="'+fs(2.05*scale)+'" font-weight="600" text-anchor="middle" fill="'+pal.statValue+'">'+esc(item.value)+'</text><text class="stat-label" x="'+f(cx)+'" y="'+f(ly)+'" font-size="'+fs(1.28*scale)+'" font-weight="500" text-anchor="middle" fill="'+pal.statLabel+'">'+esc(item.label)+'</text></g>';});
       }else if(items.length){
         items.forEach(function(item){
-        var statsScale=state.statsFontSize/100, valueFs=sc(2.35*statsScale), labelFs=sc(1.5*statsScale);
-        var valueOffset=sc(1.8+(state.statsFontSize-100)*0.01);
+        var statsScale=state.statsFontSize/100, valueFs=fs(2.35*statsScale), labelFs=fs(1.5*statsScale);
+        var valueOffset=fs(1.8+(state.statsFontSize-100)*0.01);
         h+='<g class="stat"><text class="stat-value" x="0" y="'+f(LAY.statY-valueOffset)+'" font-size="'+valueFs+'" font-weight="600" text-anchor="middle" fill="'+pal.statValue+'">'+esc(item.value)+'</text>'+ 
           '<text class="stat-label" x="0" y="'+LAY.statY+'" font-size="'+labelFs+'" font-weight="500" text-anchor="middle" fill="'+pal.statLabel+'">'+esc(item.label)+'</text></g>';
         });
@@ -109,7 +109,7 @@ function render(){
   }
   h+=header;
   if(t&&attrOn()){
-    h+='<text id="pattr" x="'+LAY.mapR+'" y="'+f(fmt().B+sc(0.4))+'" font-size="'+sc(1.9)+'" font-weight="500" text-anchor="end" fill="'+pal.muted+'">'+esc(attrText())+'</text>';
+    h+='<text id="pattr" x="'+LAY.mapR+'" y="'+f(fmt().B+sc(0.4))+'" font-size="'+fs(1.9)+'" font-weight="500" text-anchor="end" fill="'+pal.muted+'">'+esc(attrText())+'</text>';
   }
   if(state.fmt==='story'&&state.safe){
     var HH=fmt().H;
@@ -135,7 +135,7 @@ function render(){
   var sub=svg.querySelector('#psubtitle');
   if(sub){var subWidth=sub.getComputedTextLength(),subMax=W;if(subWidth>subMax){sub.setAttribute('font-size',f(subtitleFs()*subMax/subWidth));}}
   var pa=svg.querySelector('#pattr');
-  if(pa){var pl=pa.getComputedTextLength(); if(pl>W){pa.setAttribute('font-size',f(sc(1.9)*W/pl));}}
+  if(pa){var pl=pa.getComputedTextLength(); if(pl>W){pa.setAttribute('font-size',f(fs(1.9)*W/pl));}}
   // center each stat in its column and shrink only text that exceeds that column
   var stats=Array.prototype.slice.call(svg.querySelectorAll(LAY.landscape?'.stat.landscape-stat':'.stat'));
   if(stats.length){
